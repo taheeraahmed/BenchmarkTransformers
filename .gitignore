@@ -1,2 +1,6 @@
 .venv/
+<<<<<<< HEAD
 models/
+=======
+checkpoints/
+>>>>>>> 2312a1cb0ced2c9b43062ac2f069e41714757ae2

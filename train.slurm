@@ -1,4 +1,5 @@
 #!/bin/sh
+DATE=$(date "+%Y-%m-%d-%H-%M-%S")
 #SBATCH --partition=short
 #SBATCH --account=share-ie-idi
 #SBATCH --job-name=benchmarking-transformers
@@ -6,7 +7,7 @@
 #SBATCH --nodes=1             # 1 compute nodes
 #SBATCH --cpus-per-task=4     # 2 CPU cores
 #SBATCH --mem=5G              # 5 gigabytes memory
-#SBATCH --output=benchmarking-transformers.txt    # Log file
+#SBATCH --output=$DATE-benchmarking-transformers.txt    # Log file
 
 echo ">> module load Python/3.10.8-GCCcore-12.2.0"
 module load Python/3.10.8-GCCcore-12.2.0

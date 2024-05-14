@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+import pprint
 import time
 import numpy as np
 from optparse import OptionParser
@@ -115,7 +116,7 @@ def get_args_parser():
 
 
 def main(args):
-    print(args)
+    pprint(args)
     assert args.data_dir is not None
     assert args.train_list is not None
     assert args.val_list is not None

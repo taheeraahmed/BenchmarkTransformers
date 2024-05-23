@@ -40,7 +40,6 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
   if not os.path.exists(output_path):
     os.makedirs(output_path)
 
-
   # training phase
   if args.mode == "train":
     data_loader_train = DataLoader(dataset=dataset_train, batch_size=args.batch_size, shuffle=True,

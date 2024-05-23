@@ -62,7 +62,7 @@ def build_transform_classification(normalize, crop_size=224, resize=256, mode="t
         if normalize is not None:
           transformations_list.append(normalize)
     transformSequence = transforms.Compose(transformations_list)
-
+    print(transformSequence)
     return transformSequence
 
 def build_transform_segmentation():

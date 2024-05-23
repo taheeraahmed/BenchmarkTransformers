@@ -2,10 +2,11 @@
 #SBATCH --partition=GPUQ
 #SBATCH --account=share-ie-idi
 #SBATCH --job-name=benchmarking-transformers
-#SBATCH --time=0-20:00:00     # duration
+#SBATCH --time=0-00:10:00     # duration
 #SBATCH --nodes=1             # num compute nodes
 #SBATCH --cpus-per-task=8     # num CPU cores
-#SBATCH --mem=5G              # 5 gigabytes memory
+#SBATCH --mem=64G              # 5 gigabytes memory
+#SBATCH --gres=gpu:1
 
 echo ">>nvidia-smi"
 nvidia-smi
@@ -26,7 +27,7 @@ python main_classification.py --data_set ChestXray14  \
 --model swin_base \
 --init simmim \
 --pretrained_weights /cluster/home/taheeraa/code/BenchmarkTransformers/models/simmim_swinb_ImageNet_Xray926k.pth \
---data_dir /cluster/home/taheeraa/datasets/chestxray-14 \
+--data_dir /cluster/home/taheeraa/datasets/chestxray-14/images \
 --train_list dataset/Xray14_train_official.txt \
 --val_list dataset/Xray14_val_official.txt \
 --test_list dataset/Xray14_test_official.txt \

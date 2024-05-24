@@ -2,7 +2,7 @@
 #SBATCH --partition=GPUQ
 #SBATCH --account=share-ie-idi
 #SBATCH --job-name=benchmarking-transformers
-#SBATCH --time=0-00:10:00     # duration
+#SBATCH --time=0-00:40:00     # duration
 #SBATCH --nodes=1             # num compute nodes
 #SBATCH --cpus-per-task=8     # num CPU cores
 #SBATCH --mem=64G              # 5 gigabytes memory
@@ -26,6 +26,9 @@ echo ""
 python main_classification.py --data_set ChestXray14  \
 --model swin_base \
 --init simmim \
+--mode test \
+--resume true \
+--test_augment false \
 --pretrained_weights /cluster/home/taheeraa/code/BenchmarkTransformers/models/simmim_swinb_ImageNet_Xray926k.pth \
 --data_dir /cluster/home/taheeraa/datasets/chestxray-14/images \
 --train_list dataset/Xray14_train_official.txt \
@@ -36,6 +39,7 @@ python main_classification.py --data_set ChestXray14  \
 --opt sgd \
 --epochs 200 \
 --warmup-epochs 20 \
---batch_size 64
+--batch_size 64 \
+--normalization chestx-ray
 
 echo ">> done"

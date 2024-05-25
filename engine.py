@@ -58,7 +58,10 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
       best_val_loss = init_loss
       patience_counter = 0
       save_model_path = os.path.join(model_path, experiment)
-      criterion = torch.nn.BCEWithLogitsLoss()
+      if args.criterion == "bce":
+        criterion = torch.nn.BCEWithLogitsLoss()
+      elif args.criterion == "mlsm":
+        criterion = torch.nn.MultiLabelSoftMarginLoss()
       if args.data_set == "RSNAPneumonia":
         criterion = torch.nn.CrossEntropyLoss()
       model = build_classification_model(args)
@@ -150,6 +153,9 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
     with open(log_file, 'r') as reader, open(output_file, 'a') as writer:
       experiment = reader.readline()
       print(">> Disease = {}".format(diseases))
+      writer.write(f"normalization; {args.normalization}, batch_size; {args.batch_size}\n")
+      writer.write(
+          f"test_augment; {args.test_augment} \n")
       writer.write("Disease = {}\n".format(diseases))
 
       while experiment:

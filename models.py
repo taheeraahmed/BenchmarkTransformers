@@ -46,6 +46,20 @@ def build_classification_model(args):
             elif args.init.lower() =="beit":
                 model = timm.create_model('beit_base_patch16_224', num_classes=args.num_class, pretrained=True)
 
+        elif args.model_name.lower() == "resnet50":
+            if args.init.lower() == "imagenet_1k":
+                model = timm.create_model('resnet50', num_classes=args.num_class, pretrained=True)
+        
+        elif args.model_name.lower() == "alexnet":
+            if args.init.lower() == "imagenet_1k":
+                model = timm.create_model(
+                    'alexnet', num_classes=args.num_class, pretrained=True)
+
+        elif args.model_name.lower() == "densenet121":
+            if args.init.lower() == "imagenet_1k":
+                model = timm.create_model(
+                    'densenet121', num_classes=args.num_class, pretrained=True)
+
         elif args.model_name.lower() == "vit_small":
             if args.init.lower() =="random":
                 model = timm.create_model('vit_small_patch16_224', num_classes=args.num_class, pretrained=False)

@@ -45,6 +45,10 @@ def get_args_parser():
     parser.add_option("--epochs", dest="epochs", help="num of epoches", default=200, type="int")
     parser.add_option("--exp_name", dest="exp_name", default="", type="string")
 
+    parser.add_option("--criterion", dest="criterion",
+                      default="bce", type="string")
+    parser.add_option("--add_augment", dest="add_augment", help="whether use additional augmentations", default=True)
+
     # Optimizer parameters
     parser.add_option('--opt', default='momentum', type=str, metavar='OPTIMIZER',
                         help='Optimizer (default: "adamw"')
@@ -122,7 +126,9 @@ def main(args):
     assert args.test_list is not None
     #if args.init.lower() != 'imagenet' and args.init.lower() != 'random':
     #    assert args.proxy_dir is not None
-    args.exp_name = args.model_name + "_" + args.init + args.exp_name
+
+    # args.exp_name = args.model_name + "_" + args.init + args.exp_name
+    args.exp_name = f"{args.model_name}_{args.init}_{args.opt}_{args.batch_size}_{args.criterion}_{args.add_augment}_{args.exp_name}"
     model_path = os.path.join("./Models/Classification",args.data_set)
     output_path = os.path.join("./Outputs/Classification",args.data_set)
 
@@ -130,13 +136,13 @@ def main(args):
         diseases = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule',
                     'Pneumonia', 'Pneumothorax', 'Consolidation', 'Edema',
                     'Emphysema', 'Fibrosis', 'Pleural_Thickening', 'Hernia']
-        dataset_train = ChestXray14Dataset(images_path=args.data_dir, file_path=args.train_list,
-                                           augment=build_transform_classification(normalize=args.normalization, mode="train"),annotation_percent=args.anno_percent)
-
+        dataset_train = ChestXray14Dataset(images_path=args.data_dir,  file_path=args.train_list,
+                                        augment=build_transform_classification(normalize=args.normalization, add_augment=args.add_augment, mode="train"),annotation_percent=args.anno_percent)
         dataset_val = ChestXray14Dataset(images_path=args.data_dir, file_path=args.val_list,
-                                         augment=build_transform_classification(normalize=args.normalization, mode="valid"))
+                                         augment=build_transform_classification(normalize=args.normalization, add_augment=args.add_augment, mode="valid"))
         dataset_test = ChestXray14Dataset(images_path=args.data_dir, file_path=args.test_list,
-                                          augment=build_transform_classification(normalize=args.normalization, mode="test"))
+                                          augment=build_transform_classification(normalize=args.normalization, add_augment=args.add_augment, mode="test"))
+        
 
         classification_engine(args, model_path, output_path, diseases, dataset_train, dataset_val, dataset_test)
 

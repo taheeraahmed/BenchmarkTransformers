@@ -1,9 +1,0 @@
-Disease = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule', 'Pneumonia', 'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema', 'Fibrosis', 'Pleural_Thickening', 'Hernia']
-swin_base_simmim_run_0: AUC = [0.7919	0.907 	0.8467	0.7185	0.8466	0.7681	0.7472	0.8771	0.7689	0.8607
- 0.9317	0.8539	0.8038	0.9146]
-swin_base_simmim_run_0: AUC = 0.8312
-All trials: mAUC  = [0.8312]
-Mean AUC over All trials = 0.8312
-STD over All trials:  = 0.0000
-Disease = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule', 'Pneumonia', 'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema', 'Fibrosis', 'Pleural_Thickening', 'Hernia']
-Disease = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule', 'Pneumonia', 'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema', 'Fibrosis', 'Pleural_Thickening', 'Hernia']

@@ -4,4 +4,6 @@ __pycache__/
 models/
 benchmarking-transformers.txt
 Models/
+Outputs/
 *.out
+*.txt

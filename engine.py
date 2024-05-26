@@ -139,7 +139,7 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
         f.close()
 
   print ("start testing.....")
-  output_file = os.path.join(output_path, args.exp_name + "_results.txt")
+  output_file = os.path.join(output_path, "results.txt")
 
   data_loader_test = DataLoader(dataset=dataset_test, batch_size=args.batch_size, shuffle=False,
                                 num_workers=args.workers, pin_memory=True)

@@ -5,7 +5,7 @@ from sklearn.metrics import roc_auc_score
 
 import torch
 import torch.nn as nn
-import torchvision.models as models
+from torchvision.models import resnet50, alexnet, densenet121, efficientnet_b1
 
 import timm
 from timm.models.vision_transformer import VisionTransformer, _cfg
@@ -52,9 +52,10 @@ def build_classification_model(args):
         
         elif args.model_name.lower() == "alexnet":
             if args.init.lower() == "imagenet_1k":
-                model = timm.create_model(
-                    'alexnet', num_classes=args.num_class, pretrained=True)
-
+                model = alexnet(weights="DEFAULT")
+                model.classifier = nn.Linear(
+                    256*6*6, args.num_class, bias=True)
+                
         elif args.model_name.lower() == "densenet121":
             if args.init.lower() == "imagenet_1k":
                 model = timm.create_model(

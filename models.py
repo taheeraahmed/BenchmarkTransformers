@@ -87,7 +87,10 @@ def build_classification_model(args):
                 model = timm.create_model('swin_base_patch4_window7_224', num_classes=args.num_class, pretrained=True)
             elif args.init.lower() =="imagenet_21k":
                 model = timm.create_model('swin_base_patch4_window7_224_in22k', num_classes=args.num_class, pretrained=True)
-            
+            else: 
+                model = timm.create_model(
+                    'swin_base_patch4_window7_224_in22k', num_classes=args.num_class, pretrained=True)
+                
         elif args.model_name.lower() == "swin_tiny": 
             if args.init.lower() =="random":
                 model = timm.create_model('swin_tiny_patch4_window7_224', num_classes=args.num_class, pretrained=False)

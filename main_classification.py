@@ -125,17 +125,10 @@ def main(args):
     assert args.train_list is not None
     assert args.val_list is not None
     assert args.test_list is not None
-    #if args.init.lower() != 'imagenet' and args.init.lower() != 'random':
-    #    assert args.proxy_dir is not None
 
-    # args.exp_name = args.model_name + "_" + args.init + args.exp_name
     args.exp_name = f"{args.model_name}_{args.init}_{args.opt}_{args.batch_size}_{args.criterion}_{args.add_augment}{args.exp_name}"
     model_path = os.path.join("./Models/Classification",args.data_set)
-    output_path = os.path.join("./Outputs/Classification",args.data_set)
-
-    print("ADD AUGMENT CHECKING")
-    print(type(args.add_augment))
-    print(args.add_augment)
+    output_path = os.path.join("./Models/Classification",args.data_set)
 
     if args.data_set == "ChestXray14":
         diseases = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule',

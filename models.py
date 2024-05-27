@@ -60,7 +60,6 @@ def build_classification_model(args):
                 model = timm.create_model('resnet50', num_classes=args.num_class, pretrained=True)
                 if args.classifying_head:
                     model.fc = classifying_head(model.fc.in_features, args.num_class)
-                    
         elif args.model_name.lower() == "alexnet":
             if args.init.lower() == "imagenet_1k":
                 model = alexnet(weights="DEFAULT")

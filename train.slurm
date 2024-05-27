@@ -32,6 +32,7 @@ python main_classification.py --data_set ChestXray14 \
     --init $INIT \
     --criterion $CRITERION \
     --add_augment $ADD_AUGMENT \
+    --classifying_head $CLASSIFYING_HEAD \
     --test_augment $TEST_AUGMENT \
     --lr $LR \
     --opt $OPT \
@@ -44,5 +45,6 @@ python main_classification.py --data_set ChestXray14 \
     --epochs 200 \
     --warmup-epochs 20 \
     --normalization imagenet
+
 
 echo ">> done"

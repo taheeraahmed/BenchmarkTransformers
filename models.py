@@ -14,6 +14,15 @@ from timm.models.layers import trunc_normal_, PatchEmbed
 from functools import partial
 import simmim
 
+def classifying_head(in_features: int, num_labels: int):
+    return nn.Sequential(
+        nn.Dropout(p=0.2),
+        nn.Linear(in_features=in_features, out_features=128),
+        nn.ReLU(),
+        nn.BatchNorm1d(num_features=128),
+        nn.Linear(128, num_labels),
+    )
+
 def build_classification_model(args):
     model = None
     print("Creating model...")
@@ -49,17 +58,25 @@ def build_classification_model(args):
         elif args.model_name.lower() == "resnet50":
             if args.init.lower() == "imagenet_1k":
                 model = timm.create_model('resnet50', num_classes=args.num_class, pretrained=True)
-        
+                if args.classifying_head:
+                    model.fc = classifying_head(model.fc.in_features, args.num_class)
+                    
         elif args.model_name.lower() == "alexnet":
             if args.init.lower() == "imagenet_1k":
                 model = alexnet(weights="DEFAULT")
                 model.classifier = nn.Linear(
                     256*6*6, args.num_class, bias=True)
+                if args.classifying_head:
+                    input_features = 256*6*6
+                    model.classifier = classifying_head(
+                        input_features, args.num_class)
                 
         elif args.model_name.lower() == "densenet121":
             if args.init.lower() == "imagenet_1k":
                 model = timm.create_model(
                     'densenet121', num_classes=args.num_class, pretrained=True)
+                if args.classifying_head:
+                    model.classifier = classifying_head(1024, args.num_class)
 
         elif args.model_name.lower() == "vit_small":
             if args.init.lower() =="random":

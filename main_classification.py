@@ -49,6 +49,8 @@ def get_args_parser():
                       default="bce", type="string")
     parser.add_option("--add_augment", dest="add_augment", help="whether use additional augmentations", default=True, action="callback",
                       callback=vararg_callback_bool)
+    parser.add_option("--classifying_head", dest="classifying_head", help="whether use special classfier head", default=False, action="callback",
+                      callback=vararg_callback_bool)
 
     # Optimizer parameters
     parser.add_option('--opt', default='momentum', type=str, metavar='OPTIMIZER',
@@ -128,7 +130,7 @@ def main(args):
 
     args.exp_name = f"{args.model_name}_{args.init}_{args.opt}_{args.batch_size}_{args.criterion}_{args.add_augment}{args.exp_name}"
     model_path = os.path.join("./Models/Classification",args.data_set)
-    output_path = os.path.join("./Models/Classification",args.data_set)
+    output_path = os.path.join("./Models/Classification",args.data_set, args.exp_name)
 
     if args.data_set == "ChestXray14":
         diseases = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule',

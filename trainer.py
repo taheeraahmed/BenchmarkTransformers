@@ -5,34 +5,42 @@ import torch
 from tqdm import tqdm
 
 
-def train_one_epoch(data_loader_train, device,model, criterion, optimizer, epoch):
-  batch_time = MetricLogger('Time', ':6.3f')
-  losses = MetricLogger('Loss', ':.4e')
-  progress = ProgressLogger(
-    len(data_loader_train),
-    [batch_time, losses],
-    prefix="Epoch: [{}]".format(epoch))
+def train_one_epoch(data_loader_train, device, model, criterion, optimizer, epoch, accumulation_steps=1):
+    batch_time = MetricLogger('Time', ':6.3f')
+    losses = MetricLogger('Loss', ':.4e')
+    progress = ProgressLogger(
+        len(data_loader_train) // accumulation_steps,
+        [batch_time, losses],
+        prefix="Epoch: [{}]".format(epoch))
 
-  model.train()
+    model.train()
 
-  end = time.time()
-  for i, (samples, targets) in enumerate(data_loader_train):
-    samples, targets = samples.float().to(device), targets.float().to(device)
-    
-    outputs = model(samples)
-    loss = criterion(outputs, targets)
-
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-
-    losses.update(loss.item(), samples.size(0))
-    batch_time.update(time.time() - end)
+    optimizer.zero_grad()  # Initialize gradients to zero at the start of the epoch
     end = time.time()
+    for i, (samples, targets) in enumerate(data_loader_train):
+        samples, targets = samples.float().to(device), targets.float().to(device)
+        outputs = model(samples)
+        loss = criterion(outputs, targets) / accumulation_steps  # Normalize the loss to account for accumulation
 
-    if i % 50 == 0:
-      progress.display(i)
+        loss.backward()  # Accumulate gradients
 
+        if (i + 1) % accumulation_steps == 0:
+            optimizer.step()  # Update weights
+            optimizer.zero_grad()  # Reset gradients
+
+            # Only update loss and timer for batches where we perform an optimizer step
+            losses.update(loss.item() * accumulation_steps, samples.size(0))  # Scale loss back up
+            batch_time.update(time.time() - end)
+            end = time.time()
+
+            # Display progress every 50 optimizer steps (adjust as needed)
+            if (i // accumulation_steps) % 50 == 0:
+                progress.display(i // accumulation_steps)
+
+    # If there are any remaining gradients that haven't been stepped through at the end of the epoch
+    if len(data_loader_train) % accumulation_steps != 0:
+        optimizer.step()
+        optimizer.zero_grad()
 
 def evaluate(data_loader_val, device, model, criterion):
   model.eval()

@@ -51,6 +51,7 @@ def get_args_parser():
                       callback=vararg_callback_bool)
     parser.add_option("--classifying_head", dest="classifying_head", help="whether use special classfier head", default=False, action="callback",
                       callback=vararg_callback_bool)
+    parser.add_option("--grad_accumuluate", dest="grad_accumuluate", help="Enable accumuluate", default=1, type="int")
 
     # Optimizer parameters
     parser.add_option('--opt', default='momentum', type=str, metavar='OPTIMIZER',

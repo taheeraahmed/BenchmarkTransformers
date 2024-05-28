@@ -129,7 +129,14 @@ def main(args):
     assert args.val_list is not None
     assert args.test_list is not None
 
-    args.exp_name = f"{args.model_name}_{args.init}_{args.opt}_{args.batch_size}_{args.criterion}_{args.add_augment}{args.exp_name}"
+    args.exp_name = f"{args.model_name}_{args.init}_{args.opt}_{args.batch_size}_{args.criterion}"
+
+    if args.add_augment:
+        args.exp_name = f"{args.exp_name}_aug"
+
+    if args.classifying_head:
+        args.exp_name = f"{args.exp_name}_class"
+    
     model_path = os.path.join("./Models/Classification",args.data_set)
     output_path = os.path.join("./Models/Classification",args.data_set, args.exp_name)
 

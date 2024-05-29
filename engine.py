@@ -1,11 +1,7 @@
 
 import os
 import sys
-import shutil
-import time
 import numpy as np
-from optparse import OptionParser
-from tqdm import tqdm
 import copy
 
 
@@ -16,14 +12,11 @@ from sklearn.metrics import accuracy_score
 import torch
 import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
-#from torch.optim.lr_scheduler import ReduceLROnPlateau
 from trainer import train_one_epoch,test_classification,evaluate
-#import segmentation_models_pytorch as smp
-from utils import cosine_anneal_schedule,dice,mean_dice_coef
 
 from timm.scheduler import create_scheduler
 from timm.optim import create_optimizer
-from timm.utils import NativeScaler, get_state_dict, ModelEma
+from timm.utils import NativeScaler
 
 sys.setrecursionlimit(40000)
 

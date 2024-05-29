@@ -3,10 +3,10 @@ import os
 import sys
 import numpy as np
 import copy
-
+import pandas as pd
 
 from models import build_classification_model, save_checkpoint
-from utils import metric_AUROC
+from utils import metric_AUROC, generate_class_weights
 from sklearn.metrics import accuracy_score
 
 import torch
@@ -35,6 +35,7 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
 
   # training phase
   if args.mode == "train":
+    
     data_loader_train = DataLoader(dataset=dataset_train, batch_size=args.batch_size, shuffle=True,
                                    num_workers=args.workers, pin_memory=True)
     data_loader_val = DataLoader(dataset=dataset_val, batch_size=args.batch_size, shuffle=False,
@@ -53,6 +54,21 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
       save_model_path = os.path.join(model_path, experiment)
       if args.criterion == "bce":
         criterion = torch.nn.BCEWithLogitsLoss()
+      elif args.criterion == "wbce":
+        columns = ['Image Filename'] + diseases
+        df_train = pd.read_csv(args.train_list, sep='\s+', names=columns)
+        df_train = df_train.drop(columns=['Image Filename'])
+
+        class_weights_dict = generate_class_weights(
+            df_train, multi_class=False, one_hot_encoded=True)
+        class_weights_list = [class_weights_dict[i] for i in class_weights_dict]
+        class_weights_tensor = torch.tensor(
+            class_weights_list, dtype=torch.float32)
+        max_weight = torch.max(class_weights_tensor)
+        normalized_class_weights_tensor = class_weights_tensor / max_weight
+
+        print("class_weights: " + normalized_class_weights_tensor)
+        criterion = torch.nn.BCEWithLogitsLoss(weight=normalized_class_weights_tensor)
       elif args.criterion == "mlsm":
         criterion = torch.nn.MultiLabelSoftMarginLoss()
       if args.data_set == "RSNAPneumonia":

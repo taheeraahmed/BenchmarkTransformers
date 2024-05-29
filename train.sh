@@ -28,7 +28,7 @@ if [ "$CLASSIFYING_HEAD" = True ]; then
     EXPERIMENT_NAME="${EXPERIMENT_NAME}_class"
 fi
 
-OUTPUT_DIR="/cluster/home/taheeraa/code/BenchmarkTransformers/Models/Classification/ChestXray14/${EXPERIMENT_NAME}"
+OUTPUT_DIR="/cluster/home/taheeraa/code/BenchmarkTransformers/models/classification/ChestXray14/${EXPERIMENT_NAME}"
 mkdir -p $OUTPUT_DIR
 
 COUNT=$(find "$OUTPUT_DIR" -type f -name "*.out" | wc -l)

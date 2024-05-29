@@ -1,6 +1,5 @@
-from sklearn.metrics import roc_auc_score, accuracy_score
-import torch
-import numpy as np
+from sklearn.metrics import roc_auc_score
+
 
 class MetricLogger(object):
     """Computes and stores the average and current value"""
@@ -91,67 +90,3 @@ def vararg_callback_int(option, opt_str, value, parser):
 
     del parser.rargs[:len(value)]
     setattr(parser.values, option.dest, value)
-
-
-class AverageMeter(object):
-    """Computes and stores the average and current value"""
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-
-
-def torch_dice_coef_loss(y_true,y_pred, smooth=1.):
-    y_true_f = torch.flatten(y_true)
-    y_pred_f = torch.flatten(y_pred)
-    intersection = torch.sum(y_true_f * y_pred_f)
-    return 1. - ((2. * intersection + smooth) / (torch.sum(y_true_f) + torch.sum(y_pred_f) + smooth))
-
-def torch_dice_coef_loss(y_true,y_pred, smooth=1.):
-    y_true_f = torch.flatten(y_true)
-    y_pred_f = torch.flatten(y_pred)
-    intersection = torch.sum(y_true_f * y_pred_f)
-    return 1. - ((2. * intersection + smooth) / (torch.sum(y_true_f) + torch.sum(y_pred_f) + smooth))
-
-
-def cosine_anneal_schedule(t,epochs,learning_rate):
-    T=epochs
-    M=1
-    alpha_zero = learning_rate
-
-    cos_inner = np.pi * (t % (T // M))  # t - 1 is used when t has 1-based indexing.
-    cos_inner /= T // M
-    cos_out = np.cos(cos_inner) + 1
-    return float(alpha_zero / 2 * cos_out)
-
-def dice(im1, im2, empty_score=1.0):
-    im1 = np.asarray(im1 > 0.5).astype(np.bool)
-    im2 = np.asarray(im2 > 0.5).astype(np.bool)
-
-    if im1.shape != im2.shape:
-        raise ValueError("Shape mismatch: im1 and im2 must have the same shape.")
-
-    im_sum = im1.sum() + im2.sum()
-    if im_sum == 0:
-        return empty_score
-
-    intersection = np.logical_and(im1, im2)
-
-    return 2. * intersection.sum() / im_sum
-
-
-def mean_dice_coef(y_true,y_pred):
-    sum=0
-    for i in range (y_true.shape[0]):
-        sum += dice(y_true[i,:,:,:],y_pred[i,:,:,:])
-    return sum/y_true.shape[0]

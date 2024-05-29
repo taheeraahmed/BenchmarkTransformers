@@ -72,9 +72,11 @@ def classification_engine(args, model_path, output_path, diseases, dataset_train
                 max_weight = torch.max(class_weights_tensor)
                 normalized_class_weights_tensor = class_weights_tensor / max_weight
 
-                print("class_weights: " + normalized_class_weights_tensor)
+                print("class_weights: " + str(normalized_class_weights_tensor))
+
+                weights = normalized_class_weights_tensor.to(device)
                 criterion = torch.nn.BCEWithLogitsLoss(
-                    weight=normalized_class_weights_tensor)
+                    weight=weights)
             elif args.criterion == "mlsm":
                 criterion = torch.nn.MultiLabelSoftMarginLoss()
             if args.data_set == "RSNAPneumonia":

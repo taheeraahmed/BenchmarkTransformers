@@ -8,7 +8,7 @@ ADD_AUGMENT=True
 
 #LR=0.01
 LR=0.0005
-OPT=adam
+OPT=adamw
 BATCH_SIZE=64
 INIT=imagenet_1k
 

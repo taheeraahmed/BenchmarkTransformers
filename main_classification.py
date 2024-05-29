@@ -1,16 +1,10 @@
 import os
 import sys
-import shutil
-import time
-import numpy as np
 from optparse import OptionParser
-from shutil import copyfile
-from tqdm import tqdm
 
 from utils import vararg_callback_bool, vararg_callback_int
 from dataloader import  *
 
-import torch
 from engine import classification_engine
 
 sys.setrecursionlimit(40000)
@@ -137,8 +131,8 @@ def main(args):
     if args.classifying_head:
         args.exp_name = f"{args.exp_name}_class"
     
-    model_path = os.path.join("./Models/Classification",args.data_set)
-    output_path = os.path.join("./Models/Classification",args.data_set, args.exp_name)
+    model_path = os.path.join("./models/classification",args.data_set)
+    output_path = os.path.join("./models/classification",args.data_set, args.exp_name)
 
     if args.data_set == "ChestXray14":
         diseases = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule',
